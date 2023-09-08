@@ -1,6 +1,7 @@
 import re
 import os
 import time
+import getpass, sys
 from config import PrinterConfiguration
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
@@ -10,7 +11,6 @@ import configparser
 LABEL_PRINTER_FILE_EXTENSION_PATTERN = r"\.(zpl|lbl)$"
 TARGET_DIRECTORY = os.path.join(os.path.expanduser("~"), "Downloads")
 CONFIG_FILE_PATH = 'config.ini'
-
 
 class LabelPrinterHandler(FileSystemEventHandler):
 
@@ -59,8 +59,12 @@ if __name__ == '__main__':
     config = config_manager.read()
 
     obs = Observer()
-    obs.schedule(LabelPrinterHandler(), path=TARGET_DIRECTORY)
-    obs.start()
+    if os.path.exists(TARGET_DIRECTORY):
+        obs.schedule(LabelPrinterHandler(), path=TARGET_DIRECTORY)
+        obs.start()
+        print(f"👀️ Monitoring directory: {TARGET_DIRECTORY}")
+    else:
+        print(f"The target directory '{TARGET_DIRECTORY}' does not exist.")
     print("✨️ Label Printer Tracker Started")
     try:
         while 1:

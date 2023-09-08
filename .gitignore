@@ -3,3 +3,6 @@ env
 __pycache__
 .vscode
 config.ini
+build
+dist
+main.spec
