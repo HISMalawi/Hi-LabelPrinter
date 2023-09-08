@@ -1,1 +1,2 @@
-watchdog
+configparser==6.0.0
+watchdog==3.0.0
