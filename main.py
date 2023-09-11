@@ -1,7 +1,6 @@
 import re
 import os
 import time
-import getpass, sys
 from config import PrinterConfiguration
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
