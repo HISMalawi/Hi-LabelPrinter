@@ -1,22 +1,15 @@
 # Introduction
-This scripts helps to detect zpl files inside the downloads folder 
-and pushes them to a label printer.
-
-The system detects files with extension `.raw.z64.zpl` created by a
-browser app that generates zpl commands.
+This script helps to detect label files downloaded through a web browser with file extensions of `.lbl` or `.zpl`
+and dispatches print commands to the default printer.
 
 # Requirements
-1. Ubuntu
-2. python 3 or greater
+1. Ubuntu 22.0
+2. python3
 
-# Installation steps
-1. Install virtual env folder inside the directory like `python -m venv myenv`
-2. Activate virtual env like `source myenv/bin/activate`
-3. Install dependancies using `pip3 install -r requirements.txt`
-
-
-# Running the app
-1. Run `python3 zpl_tracker.py` using the terminal
+# Ubuntu installation
+1. Open the terminal and ensure you're in the root directory of the application
+2. Enter the following command to begin setup process: `sudo ./setup.sh`
+3. Once installation is complete, you may want to restart your computer or run `systemctl start HILabelPrinter`
 
 # TODOs:
 1. Compile this into executionable file that can be easily installed
