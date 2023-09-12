@@ -1,4 +1,10 @@
+import os
 import configparser
+
+DEFAULT_CONFIG = {
+    'delete_file': True,
+    'file_directory': "Downloads"
+}
 
 class PrinterConfiguration:
     def __init__(self, filename='config.ini'):
@@ -6,11 +12,13 @@ class PrinterConfiguration:
         self.config = configparser.ConfigParser()
 
     def read(self):
+        if not os.path.exists(self.filename):
+            self.create_default_config()
         self.config.read(self.filename)
         return self.config
 
-    def create(self):
-        self.config['DEFAULT'] = {'delete_files': True}
+    def create_default_config(self):
+        self.config['DEFAULT'] = DEFAULT_CONFIG
         with open(self.filename, 'w') as configfile:
             self.config.write(configfile)
 

@@ -4,28 +4,13 @@ import time
 from config import PrinterConfiguration
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
-import configparser
-
 
 LABEL_PRINTER_FILE_EXTENSION_PATTERN = r"\.(zpl|lbl)$"
-TARGET_DIRECTORY = os.path.join(os.path.expanduser("~"), "Downloads")
-CONFIG_FILE_PATH = 'config.ini'
 
 class LabelPrinterHandler(FileSystemEventHandler):
-
     def __init__(self):
         super().__init__()
-        self.config = self.load_config()
-
-    def load_config(self):
-        config = configparser.ConfigParser()
-        if os.path.exists(CONFIG_FILE_PATH):
-            config.read(CONFIG_FILE_PATH)
-        else:
-            config['DEFAULT'] = {'delete_files': True}
-            with open(CONFIG_FILE_PATH, 'w') as configfile:
-                config.write(configfile)
-        return config
+        self.config = PrinterConfiguration().read()
 
     def delete_file(self, file_path):
         if os.path.exists(file_path):
@@ -47,24 +32,15 @@ class LabelPrinterHandler(FileSystemEventHandler):
 
 if __name__ == '__main__':
     print("✨️ Starting Label Printer Tracker Service")
-
-    if not os.path.exists(CONFIG_FILE_PATH):
-        print("✨️ Configuration file does not exist. Creating default configuration...")
-        config_manager = PrinterConfiguration(CONFIG_FILE_PATH)
-        config_manager.create()
-        print("✅️ Default configuration created.")
-
-    config_manager = PrinterConfiguration(CONFIG_FILE_PATH)
-    config = config_manager.read()
-
+    printhandler = LabelPrinterHandler()
+    folder_config_path = printhandler.config.get('DEFAULT', 'file_directory', fallback='Downloads')
+    target_directory = os.path.join(os.path.expanduser("~"), folder_config_path)
+    if not os.path.exists(target_directory):
+        raise NameError(f"Target directory {target_directory} does not exist!")
     obs = Observer()
-    if os.path.exists(TARGET_DIRECTORY):
-        obs.schedule(LabelPrinterHandler(), path=TARGET_DIRECTORY)
-        obs.start()
-        print(f"👀️ Monitoring directory: {TARGET_DIRECTORY}")
-    else:
-        print(f"The target directory '{TARGET_DIRECTORY}' does not exist.")
-    print("✨️ Label Printer Tracker Started")
+    obs.schedule(printhandler, path=target_directory)
+    obs.start()
+    print(f"👀️ Monitoring directory: {target_directory}")
     try:
         while 1:
             time.sleep(1)
