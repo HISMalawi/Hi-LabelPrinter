@@ -13,6 +13,5 @@ and dispatches print commands to the default printer.
 
 # TODOs:
 1. Compile this into executionable file that can be easily installed
-2. Change this into a background service that can run on computer startup
-3. Add printer name configuration instead of depending on default printer provided by Os
-4. Windows support
+2. Add printer name configuration instead of depending on default printer provided by os
+3. Windows support
