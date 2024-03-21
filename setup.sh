@@ -3,6 +3,7 @@ echo "✨️ Starting printer configurations setup..."
 sudo rm -rf build
 sudo rm -rf dist
 sudo rm -rf env
+sudo apt-get install python3-venv
 env_dir="env"
 if [[ "$OSTYPE" == "msys" || "$OSTYPE" == "win32" ]]; then
     python -m venv $env_dir
